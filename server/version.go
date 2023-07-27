@@ -1,8 +1,8 @@
 package server
 
 var (
-	VERSION     string
-	BUILD_TIME  string
-	GO_VERSION  string
-	GIT_VERSION string
+	VERSION     = "0.0.1"
+	BUILD_TIME  = "2021-01-01 00:00:00"
+	GO_VERSION  = "go1.15.6"
+	GIT_VERSION = "0000000"
 )

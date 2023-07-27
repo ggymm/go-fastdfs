@@ -1,7 +1,8 @@
 .idea
-vendor/*
+
+dist/*
+
 data/*
 files/*
 conf/*
-build/*
 log/*
