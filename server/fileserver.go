@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"errors"
 	"fmt"
+	"github.com/accrescent/apkstat"
 	"io/ioutil"
 	"net"
 	"net/http"
@@ -69,10 +70,17 @@ type FileResult struct {
 	Size    int64  `json:"size"`
 	ModTime int64  `json:"mtime"`
 	//Just for Compatibility
-	Scenes  string `json:"scenes"`
-	RetMsg  string `json:"retmsg"`
-	RetCode int    `json:"retcode"`
-	Src     string `json:"src"`
+	Scenes  string  `json:"scenes"`
+	RetMsg  string  `json:"retmsg"`
+	RetCode int     `json:"retcode"`
+	Src     string  `json:"src"`
+	ApkInfo ApkInfo `json:"apkInfo"`
+}
+
+type ApkInfo struct {
+	PackageName string `json:"packageName"`
+	VersionCode string `json:"versionCode"`
+	VersionName string `json:"versionName"`
 }
 
 type StatDateFileInfo struct {
@@ -823,6 +831,26 @@ func (c *Server) BuildFileResult(fileInfo *FileInfo, r *http.Request) FileResult
 	if Config().DefaultDownload {
 		fileResult.Url = fmt.Sprintf("%s?name=%s&download=1", downloadUrl, url.PathEscape(outname))
 	}
+
+	// 解析 apk 文件
+	if strings.HasSuffix(outname, ".apk") {
+		parseApk := r.FormValue("parseApk")
+		if parseApk == "1" {
+			apkFile := filepath.Join(DOCKER_DIR, STORE_DIR_NAME, p[len(Config().Group)+1:])
+			info, err := apk.Open(apkFile)
+			if err != nil {
+				fmt.Println(err)
+			} else {
+				var apkInfo ApkInfo
+				apkInfo.PackageName = info.Manifest().Package
+				apkInfo.VersionName = info.Manifest().VersionName
+				apkInfo.VersionCode = strconv.Itoa(int(info.Manifest().VersionCode))
+
+				fileResult.ApkInfo = apkInfo
+			}
+		}
+	}
+
 	fileResult.Md5 = fileInfo.Md5
 	fileResult.Path = "/" + p
 	fileResult.Domain = domain

@@ -117,7 +117,6 @@ func (c *Server) Upload(w http.ResponseWriter, r *http.Request) {
 	done := make(chan bool, 1)
 	c.queueUpload <- WrapReqResp{&w, r, done}
 	<-done
-
 }
 
 func (c *Server) upload(w http.ResponseWriter, r *http.Request) {

@@ -478,6 +478,8 @@ func (c *Server) Index(w http.ResponseWriter, r *http.Request) {
 					  <input type="text" id="code" name="code" value="" /></span>
 					 <span class="form-line">自定义认证(auth_token):
 					  <input type="text" id="auth_token" name="auth_token" value="" /></span>
+					<span class="form-line">是否解析apk(parseApk):
+					  <input type="text" id="parseApk" name="parseApk" value="" /></span></span>
 					<input type="submit" name="submit" value="upload" />
                 </form>
 				</div>

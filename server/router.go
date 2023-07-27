@@ -43,6 +43,7 @@ func (c *Server) initRouter() {
 	mux.HandleFunc(fmt.Sprintf("%s/receive_md5s", groupRoute), c.ReceiveMd5s)
 	mux.HandleFunc(fmt.Sprintf("%s/gen_google_secret", groupRoute), c.GenGoogleSecret)
 	mux.HandleFunc(fmt.Sprintf("%s/gen_google_code", groupRoute), c.GenGoogleCode)
+	mux.HandleFunc(fmt.Sprintf("%s/merge_download", groupRoute), c.MergeDownload)
 	mux.Handle(fmt.Sprintf("%s/static/", groupRoute), http.StripPrefix(fmt.Sprintf("%s/static/", groupRoute), http.FileServer(http.Dir("./static"))))
 	mux.HandleFunc("/"+Config().Group+"/", c.Download)
 }
